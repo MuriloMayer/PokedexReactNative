@@ -1,4 +1,8 @@
-export const typeColors = {
+export interface TypeColors {
+  [key: string]: string;
+}
+
+export const typeColors: TypeColors = {
   fire: '#F08030',
   water: '#6890F0',
   grass: '#78C850',
@@ -19,11 +23,22 @@ export const typeColors = {
   steel: '#B8B8D0',
 };
 
-export const getTypeColor = type => {
+export const getTypeColor = (type: string): string => {
   return typeColors[type.toLowerCase()] || '#A8A878';
 };
 
-export const colors = {
+export interface Colors {
+  primary: string;
+  primaryDark: string;
+  accent: string;
+  background: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+}
+
+export const colors: Colors = {
   primary: '#EF5350',
   primaryDark: '#C62828',
   accent: '#FFC107',

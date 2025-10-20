@@ -1,9 +1,10 @@
-import React, {createContext, useState, useContext, useEffect} from 'react';
+import React, {createContext, useState, useContext, useEffect, ReactNode} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Pokemon, FavoritesContextData} from '../types';
 
-const FavoritesContext = createContext();
+const FavoritesContext = createContext<FavoritesContextData | undefined>(undefined);
 
-export const useFavorites = () => {
+export const useFavorites = (): FavoritesContextData => {
   const context = useContext(FavoritesContext);
   if (!context) {
     throw new Error('useFavorites must be used within FavoritesProvider');
@@ -11,15 +12,18 @@ export const useFavorites = () => {
   return context;
 };
 
-export const FavoritesProvider = ({children}) => {
-  const [favorites, setFavorites] = useState([]);
+interface FavoritesProviderProps {
+  children: ReactNode;
+}
 
-  // Carregar favoritos do AsyncStorage ao iniciar
+export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({children}) => {
+  const [favorites, setFavorites] = useState<Pokemon[]>([]);
+
   useEffect(() => {
     loadFavorites();
   }, []);
 
-  const loadFavorites = async () => {
+  const loadFavorites = async (): Promise<void> => {
     try {
       const storedFavorites = await AsyncStorage.getItem('@favorites');
       if (storedFavorites) {
@@ -30,7 +34,7 @@ export const FavoritesProvider = ({children}) => {
     }
   };
 
-  const saveFavorites = async newFavorites => {
+  const saveFavorites = async (newFavorites: Pokemon[]): Promise<void> => {
     try {
       await AsyncStorage.setItem('@favorites', JSON.stringify(newFavorites));
       setFavorites(newFavorites);
@@ -39,12 +43,12 @@ export const FavoritesProvider = ({children}) => {
     }
   };
 
-  const isFavorite = pokemon => {
+  const isFavorite = (pokemon: Pokemon): boolean => {
     return favorites.some(fav => fav.id === pokemon.id);
   };
 
-  const toggleFavorite = pokemon => {
-    let newFavorites;
+  const toggleFavorite = (pokemon: Pokemon): void => {
+    let newFavorites: Pokemon[];
     if (isFavorite(pokemon)) {
       newFavorites = favorites.filter(fav => fav.id !== pokemon.id);
     } else {
@@ -53,7 +57,7 @@ export const FavoritesProvider = ({children}) => {
     saveFavorites(newFavorites);
   };
 
-  const removeFavorite = pokemon => {
+  const removeFavorite = (pokemon: Pokemon): void => {
     const newFavorites = favorites.filter(fav => fav.id !== pokemon.id);
     saveFavorites(newFavorites);
   };

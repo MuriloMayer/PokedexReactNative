@@ -1,4 +1,8 @@
 {
   "name": "PokedexReactNative",
-  "displayName": "PokedexReactNative"
+  "displayName": "PokedexReactNative",
+  "plugins": [
+    "expo-asset",
+    "expo-font"
+  ]
 }

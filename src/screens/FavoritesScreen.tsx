@@ -1,17 +1,31 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-import {useFavorites} from '../context/FavoritesContext';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFavorites } from '../context/FavoritesContext';
 import PokemonCard from '../components/PokemonCard';
-import {colors} from '../utils/colors';
+import { colors } from '../utils/colors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { RootStackParamList } from '../types';
 
-const FavoritesScreen = ({navigation}) => {
-  const {favorites} = useFavorites();
+type FavoritesScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Favorites'
+>;
+
+const FavoritesScreen: React.FC<FavoritesScreenProps> = ({ navigation }) => {
+  const { favorites } = useFavorites();
 
   if (favorites.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyIcon}>
-          <Text style={styles.emptyIconText}>❤️</Text>
+          <MaterialCommunityIcons name="heart" size={64} color={colors.primary} style={{opacity: 0.5}} />
         </View>
         <Text style={styles.emptyTitle}>Nenhum favorito ainda</Text>
         <Text style={styles.emptySubtitle}>
@@ -20,7 +34,8 @@ const FavoritesScreen = ({navigation}) => {
         </Text>
         <TouchableOpacity
           style={styles.exploreButton}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.navigate('Home')}
+        >
           <Text style={styles.exploreButtonText}>🔍 Explorar Pokédex</Text>
         </TouchableOpacity>
       </View>
@@ -31,19 +46,19 @@ const FavoritesScreen = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>
-          {favorites.length} Pokémon{favorites.length !== 1 ? 's' : ''}{' '}
-          favorito{favorites.length !== 1 ? 's' : ''}
+          {favorites.length} Pokémon{favorites.length !== 1 ? 's' : ''} favorito
+          {favorites.length !== 1 ? 's' : ''}
         </Text>
       </View>
       <FlatList
         data={favorites}
         keyExtractor={item => item.id.toString()}
         numColumns={2}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <PokemonCard
             pokemon={item}
             onPress={() =>
-              navigation.navigate('PokemonDetail', {pokemon: item})
+              navigation.navigate('PokemonDetail', { pokemon: item })
             }
           />
         )}

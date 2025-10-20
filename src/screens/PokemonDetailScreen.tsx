@@ -2,40 +2,46 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import {Image} from 'expo-image';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {pokemonService} from '../services/pokemonService';
 import {useFavorites} from '../context/FavoritesContext';
 import {colors, getTypeColor} from '../utils/colors';
+import {RootStackParamList, PokemonDetail} from '../types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const PokemonDetailScreen = ({route}) => {
+type PokemonDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'PokemonDetail'>;
+
+const PokemonDetailScreen: React.FC<PokemonDetailScreenProps> = ({route}) => {
   const {pokemon} = route.params;
-  const [pokemonDetail, setPokemonDetail] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const {isFavorite, toggleFavorite} = useFavorites();
   const favorite = isFavorite(pokemon);
 
   useEffect(() => {
     loadPokemonDetail();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loadPokemonDetail = async () => {
+  const loadPokemonDetail = async (): Promise<void> => {
     try {
       const detail = await pokemonService.getPokemonDetail(pokemon.id);
       setPokemonDetail(detail);
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert('Erro', error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = (): void => {
     toggleFavorite(pokemon);
     Alert.alert(
       'Sucesso',
@@ -65,11 +71,22 @@ const PokemonDetailScreen = ({route}) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image source={{uri: pokemonDetail.imageUrl}} style={styles.image} />
+        <Image 
+          source={{uri: pokemonDetail.imageUrl}} 
+          style={styles.image}
+          contentFit="contain"
+          transition={300}
+        />
         <TouchableOpacity
           style={styles.favoriteButton}
-          onPress={handleToggleFavorite}>
-          <Text style={styles.favoriteIcon}>{favorite ? '❤️' : '🤍'}</Text>
+          onPress={handleToggleFavorite}
+        >
+          <MaterialCommunityIcons
+            name={favorite ? 'heart' : 'heart-outline'}
+            size={28}
+            color={favorite ? colors.primary : colors.textSecondary}
+            style={styles.favoriteIcon}
+          />
         </TouchableOpacity>
       </View>
 
@@ -150,7 +167,6 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
   },
   favoriteButton: {
     position: 'absolute',

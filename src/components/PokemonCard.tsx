@@ -1,11 +1,23 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image} from 'expo-image';
 import {colors} from '../utils/colors';
+import {Pokemon} from '../types';
 
-const PokemonCard = ({pokemon, onPress}) => {
+interface PokemonCardProps {
+  pokemon: Pokemon;
+  onPress: () => void;
+}
+
+const PokemonCard: React.FC<PokemonCardProps> = ({pokemon, onPress}) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image source={{uri: pokemon.imageUrl}} style={styles.image} />
+      <Image 
+        source={{uri: pokemon.imageUrl}} 
+        style={styles.image}
+        contentFit="contain"
+        transition={200}
+      />
       <View style={styles.info}>
         <Text style={styles.id}>#{String(pokemon.id).padStart(3, '0')}</Text>
         <Text style={styles.name}>{pokemon.name.toUpperCase()}</Text>
@@ -32,7 +44,6 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    resizeMode: 'contain',
   },
   info: {
     alignItems: 'center',
