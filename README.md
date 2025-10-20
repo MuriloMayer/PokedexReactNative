@@ -1,15 +1,15 @@
-# 🔴 Pokédex Explorer - React Native
+# 🔴 Pokédex Explorer - React Native (Expo)
 
-Um aplicativo React Native que consome a **PokéAPI** para criar um catálogo interativo de Pokémon com sistema de favoritos persistente.
+Um aplicativo React Native com Expo que consome a **PokéAPI** para criar um catálogo interativo de Pokémon com sistema de favoritos persistente.
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **React Native** 0.74+
+- **React Native** 0.76+ with **Expo** ~52.0
 - **React Navigation** - Navegação entre telas
 - **Context API** - Gerenciamento de estado global
 - **Axios** - Requisições HTTP
 - **AsyncStorage** - Persistência local de dados
-- **React Native Fast Image** - Otimização de imagens
+- **Expo Image** - Otimização de imagens
 - **PokéAPI** - Fonte de dados dos Pokémon
 
 ## 📦 Dependências
@@ -17,15 +17,16 @@ Um aplicativo React Native que consome a **PokéAPI** para criar um catálogo in
 ```json
 {
   "dependencies": {
+    "expo": "~52.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.3",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
-    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-async-storage/async-storage": "^2.1.0",
     "axios": "^1.6.2",
-    "react": "18.2.0",
-    "react-native": "0.74.0",
-    "react-native-fast-image": "^8.6.3",
-    "react-native-safe-area-context": "^4.8.2",
-    "react-native-screens": "^3.29.0"
+    "expo-image": "~2.0.0",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.2.0"
   }
 }
 ```
@@ -34,9 +35,9 @@ Um aplicativo React Native que consome a **PokéAPI** para criar um catálogo in
 
 ### Pré-requisitos
 - Node.js 18+ instalado
-- React Native CLI
-- Android Studio (para emulador Android)
-- JDK 17+
+- Expo CLI (instala automaticamente com npx)
+- Expo Go app no celular (para testar no dispositivo físico)
+- Android Studio ou Xcode (para emuladores)
 
 ### Passos
 
@@ -53,12 +54,23 @@ Um aplicativo React Native que consome a **PokéAPI** para criar um catálogo in
 
 3. **Execute o aplicativo**
    ```bash
-   # Android
-   npm run android
+   # Iniciar Expo
+   npx expo start
    
-   # iOS (apenas macOS)
-   npm run ios
+   # Para Android
+   npx expo start --android
+   
+   # Para iOS (apenas macOS)
+   npx expo start --ios
+   
+   # Para Web
+   npx expo start --web
    ```
+
+4. **Testar no celular**
+   - Instale o app **Expo Go** na Play Store ou App Store
+   - Escaneie o QR Code que aparece no terminal
+   - O app abrirá automaticamente
 
 ## 🏗️ Estrutura do Projeto
 
